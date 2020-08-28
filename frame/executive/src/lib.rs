@@ -247,9 +247,10 @@ where
 			frame_system::InitKind::Full,
 		);
 		<frame_system::Module<System> as OnInitialize<System::BlockNumber>>::on_initialize(*block_number);
+		let system_weight = <System::BlockExecutionWeight as frame_support::traits::Get<_>>::get();
 		let weight = <AllModules as OnInitialize<System::BlockNumber>>::on_initialize(*block_number)
-			.saturating_add(<System::BlockExecutionWeight as frame_support::traits::Get<_>>::get());
-		debug::info!(target: "executive", "weight: {}", weight);
+			.saturating_add(system_weight);
+		debug::info!(target: "executive", "system_weight: {}, weight: {}", system_weight, weight);
 		<frame_system::Module::<System>>::register_extra_weight_unchecked(weight, DispatchClass::Mandatory);
 
 		frame_system::Module::<System>::note_finished_initialize();
