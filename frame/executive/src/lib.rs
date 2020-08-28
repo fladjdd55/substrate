@@ -119,7 +119,7 @@ use sp_std::{prelude::*, marker::PhantomData};
 use frame_support::{
 	storage::StorageValue, weights::{GetDispatchInfo, DispatchInfo, DispatchClass},
 	traits::{OnInitialize, OnFinalize, OnRuntimeUpgrade, OffchainWorker},
-	dispatch::PostDispatchInfo,
+	dispatch::PostDispatchInfo, debug,
 };
 use sp_runtime::{
 	generic::Digest, ApplyExtrinsicResult,
@@ -249,6 +249,7 @@ where
 		<frame_system::Module<System> as OnInitialize<System::BlockNumber>>::on_initialize(*block_number);
 		let weight = <AllModules as OnInitialize<System::BlockNumber>>::on_initialize(*block_number)
 			.saturating_add(<System::BlockExecutionWeight as frame_support::traits::Get<_>>::get());
+		debug::info!(target: "executive", "weight: {}", weight);
 		<frame_system::Module::<System>>::register_extra_weight_unchecked(weight, DispatchClass::Mandatory);
 
 		frame_system::Module::<System>::note_finished_initialize();
