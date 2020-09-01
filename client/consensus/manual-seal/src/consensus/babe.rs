@@ -58,9 +58,6 @@ pub struct BabeConsensusDataProvider<B: BlockT, C> {
 	config: Config,
 }
 
-/// num of blocks per slot
-const SLOT_DURATION: u64 = 6;
-
 impl<B, C> BabeConsensusDataProvider<B, C>
 	where
 		B: BlockT,
@@ -74,7 +71,7 @@ impl<B, C> BabeConsensusDataProvider<B, C>
 		epoch_changes: SharedEpochChanges<B, Epoch>,
 	) -> Result<Self, Error> {
 		let config = Config::get_or_compute(&*client)?;
-		register_babe_inherent_data_provider(provider, SLOT_DURATION)?;
+		register_babe_inherent_data_provider(provider, config.slot_duration)?;
 
 		Ok(Self {
 			config,
