@@ -74,8 +74,6 @@ impl<B, C> BabeConsensusDataProvider<B, C>
 		epoch_changes: SharedEpochChanges<B, Epoch>,
 	) -> Result<Self, Error> {
 		let config = Config::get_or_compute(&*client)?;
-		// register fake timestamp provider.
-		provider.register_provider(MockedTimestampInherentProvider)?;
 		register_babe_inherent_data_provider(provider, SLOT_DURATION)?;
 
 		Ok(Self {
@@ -154,27 +152,5 @@ impl<B, C> ConsensusDataProvider<B> for BabeConsensusDataProvider<B, C>
 		);
 
 		Ok(())
-	}
-}
-
-/// Mocks the timestamp inherent
-pub struct MockedTimestampInherentProvider;
-
-impl ProvideInherentData for MockedTimestampInherentProvider {
-	fn inherent_identifier(&self) -> &'static InherentIdentifier {
-		&sp_timestamp::INHERENT_IDENTIFIER
-	}
-
-	fn provide_inherent_data(
-		&self,
-		inherent_data: &mut InherentData,
-	) -> Result<(), sp_inherents::Error> {
-		const TIMESTAMP: u64 = 1598950384467;
-		inherent_data.put_data(sp_timestamp::INHERENT_IDENTIFIER, &TIMESTAMP)
-	}
-
-	fn error_to_string(&self, error: &[u8]) -> Option<String> {
-		sp_timestamp::InherentError::try_from(&sp_timestamp::INHERENT_IDENTIFIER, error)
-			.map(|e| format!("{:?}", e))
 	}
 }
