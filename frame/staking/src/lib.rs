@@ -289,7 +289,7 @@ use sp_std::{
 };
 use codec::{HasCompact, Encode, Decode};
 use frame_support::{
-	decl_module, decl_event, decl_storage, ensure, decl_error,
+	decl_module, decl_event, decl_storage, ensure, decl_error, debug,
 	weights::{Weight, constants::{WEIGHT_PER_MICROS, WEIGHT_PER_NANOS}},
 	storage::IterableStorageMap,
 	dispatch::{
@@ -1426,6 +1426,7 @@ decl_module! {
 			add_weight(3, 0, 0);
 			// Additional read from `on_finalize`
 			add_weight(1, 0, 0);
+			debug::info!(target: "staking", "consumed weight: {}", consumed_weight);
 			consumed_weight
 		}
 

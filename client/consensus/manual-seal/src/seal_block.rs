@@ -57,7 +57,7 @@ pub struct SealBlockParams<'a, B: BlockT, BI, SC, C: ProvideRuntimeApi<B>, E, P:
 	/// SelectChain object
 	pub select_chain: &'a SC,
 	/// Digest provider for inclusion in blocks.
-	pub digest_provider: Option<&'a dyn ConsensusDataProvider<B, Transaction = TransactionFor<C, B>>>,
+	pub consensus_data_provider: Option<&'a dyn ConsensusDataProvider<B, Transaction = TransactionFor<C, B>>>,
 	/// block import object
 	pub block_import: &'a mut BI,
 	/// inherent data provider
@@ -76,7 +76,7 @@ pub async fn seal_block<B, BI, SC, C, E, P>(
 		block_import,
 		env,
 		inherent_data_provider,
-		digest_provider,
+		consensus_data_provider: digest_provider,
 		mut sender,
 		..
 	}: SealBlockParams<'_, B, BI, SC, C, E, P>

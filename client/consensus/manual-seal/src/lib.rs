@@ -111,7 +111,7 @@ pub struct ManualSealParams<B: BlockT, BI, E, C: ProvideRuntimeApi<B>, A: txpool
 	pub select_chain: SC,
 
 	/// Digest provider for inclusion in blocks.
-	pub digest_provider: Option<Box<dyn ConsensusDataProvider<B, Transaction = TransactionFor<C, B>>>>,
+	pub consensus_data_provider: Option<Box<dyn ConsensusDataProvider<B, Transaction = TransactionFor<C, B>>>>,
 
 	/// Provider for inherents to include in blocks.
 	pub inherent_data_providers: InherentDataProviders,
@@ -135,7 +135,7 @@ pub struct InstantSealParams<B: BlockT, BI, E, C: ProvideRuntimeApi<B>, A: txpoo
 	pub select_chain: SC,
 
 	/// Digest provider for inclusion in blocks.
-	pub digest_provider: Option<Box<dyn ConsensusDataProvider<B, Transaction = TransactionFor<C, B>>>>,
+	pub consensus_data_provider: Option<Box<dyn ConsensusDataProvider<B, Transaction = TransactionFor<C, B>>>>,
 
 	/// Provider for inherents to include in blocks.
 	pub inherent_data_providers: InherentDataProviders,
@@ -151,7 +151,7 @@ pub async fn run_manual_seal<B, BI, CB, E, C, A, SC, CS>(
 		mut commands_stream,
 		select_chain,
 		inherent_data_providers,
-		digest_provider,
+		consensus_data_provider,
 		..
 	}: ManualSealParams<B, BI, E, C, A, SC, CS>
 )
@@ -186,7 +186,7 @@ pub async fn run_manual_seal<B, BI, CB, E, C, A, SC, CS>(
 						select_chain: &select_chain,
 						block_import: &mut block_import,
 						inherent_data_provider: &inherent_data_providers,
-						digest_provider: digest_provider.as_ref().map(|p| &**p),
+						consensus_data_provider: consensus_data_provider.as_ref().map(|p| &**p),
 						pool: pool.clone(),
 						client: client.clone(),
 					}
@@ -217,7 +217,7 @@ pub async fn run_instant_seal<B, BI, CB, E, C, A, SC>(
 		client,
 		pool,
 		select_chain,
-		digest_provider,
+		consensus_data_provider,
 		inherent_data_providers,
 		..
 	}: InstantSealParams<B, BI, E, C, A, SC>
@@ -255,7 +255,7 @@ pub async fn run_instant_seal<B, BI, CB, E, C, A, SC>(
 			pool,
 			commands_stream,
 			select_chain,
-			digest_provider,
+			consensus_data_provider,
 			inherent_data_providers,
 		}
 	).await
@@ -324,7 +324,7 @@ mod tests {
 				commands_stream,
 				select_chain,
 				inherent_data_providers,
-				digest_provider: None,
+				consensus_data_provider: None,
 			}
 		);
 		std::thread::spawn(|| {
@@ -381,7 +381,7 @@ mod tests {
 				pool: pool.pool().clone(),
 				commands_stream,
 				select_chain,
-				digest_provider: None,
+				consensus_data_provider: None,
 				inherent_data_providers,
 			}
 		);
@@ -456,7 +456,7 @@ mod tests {
 				pool: pool.pool().clone(),
 				commands_stream,
 				select_chain,
-				digest_provider: None,
+				consensus_data_provider: None,
 				inherent_data_providers,
 			}
 		);

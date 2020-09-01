@@ -17,17 +17,17 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 //! Extensions for manual seal to produce blocks valid for any runtime.
+use super::Error;
 
 use sp_runtime::traits::{Block as BlockT, DigestFor};
 use sp_inherents::InherentData;
-use super::Error;
 use sp_consensus::BlockImportParams;
 
 pub mod babe;
 
 /// Consensus data provider, manual seal uses this trait object for authoring blocks valid 
 /// for any runtime.
-pub trait ConsensusDataProvider<B: BlockT> : Send + Sync {
+pub trait ConsensusDataProvider<B: BlockT>: Send + Sync {
 	/// Block import transaction type
 	type Transaction;
 
