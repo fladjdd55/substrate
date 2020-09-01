@@ -71,7 +71,7 @@ impl<B, C> BabeConsensusDataProvider<B, C>
 		epoch_changes: SharedEpochChanges<B, Epoch>,
 	) -> Result<Self, Error> {
 		let config = Config::get_or_compute(&*client)?;
-		register_babe_inherent_data_provider(provider, config.slot_duration)?;
+		register_babe_inherent_data_provider(provider, 6)?;
 
 		Ok(Self {
 			config,
